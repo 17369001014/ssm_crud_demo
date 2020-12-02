@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         id="WebApp_ID" version="2.5">
+  <!--配置一个监听器，去加载spring的配置文件
+   ContextLoaderListener 默认加载的是WEB-INF下的spring的配置文件
+   -->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <!--配置监听器，去加载类路径下的applicationContext.xml配置文件,不然默认加载的是WEB-INF下的配置文件-->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:applicationContext.xml</param-value>
+  </context-param>
+    <!--配置SpringMVC的前端控制器-->
+  <servlet>
+    <servlet-name>dispatcherServlet</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <!--去加载springmvc.xml配置文件-->
+    <!--配置加载springmvc.xml 配置文件-->
+  <init-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:springmvc.xml</param-value>
+  </init-param>
+    <!--配置服务器启动，就初始化DispatcherServlet-->
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+<servlet-mapping>
+  <servlet-name>dispatcherServlet</servlet-name>
+  <url-pattern>/</url-pattern>
+</servlet-mapping>
+  <!--配置post请求的中文乱码的过滤器，注意这个过滤器要放在其他过滤器之前-->
+  <filter>
+    <filter-name>encodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>encodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <!--配置restful风格请求的过滤器:作用将页面上的普通的post请求转换为
+    put或delete请求
+  -->
+  <filter>
+    <filter-name>hiddenHttpMethodFilter</filter-name>
+    <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>hiddenHttpMethodFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <!--配置Ajax 发送PUT请求时的处理-->
+  <filter>
+    <filter-name>HttpPutFormContentFilter</filter-name>
+    <filter-class>org.springframework.web.filter.HttpPutFormContentFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>HttpPutFormContentFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+</web-app>
